@@ -1,11 +1,26 @@
 <?php
+if ($_SERVER['SCRIPT_NAME'] == "/index2.php") {
+    if (is_dir("RabbitCMS-master")) {
+        if (exec("mv RabbitCMS-master/RabbitCMS/* .") && exec("mv RabbitCMS-master/RabbitCMS/.htaccess .")) {
+            if (exec("rm RabbitCMS-master index2.php -rf")) {
+                $success = true;
+            }
+        } else $error_message = "Move files error!";
+    }
+}
+
 if (isset($_POST['install'])) {
     // Install CMS:
     $curl = new HTTPClient("https://github.com/Everhard/RabbitCMS/archive/master.zip");
     $file = $curl->do_request();
     if ($file) {
         if (file_put_contents("rabbitcms.zip", $file)) {
-            echo "Good";
+            if (exec("unzip rabbitcms.zip")) {
+                unlink("rabbitcms.zip");
+                rename("index.php", "index2.php");
+                header("Location: index2.php");
+                exit;
+            } else $error_message = "Unzip file error!";
         } else $error_message = "Write file on disk error!";
     } else $error_message = "Download file error!";
 }
@@ -20,9 +35,12 @@ if (isset($_POST['install'])) {
   </head>
   <body>
 	<h1>Quick install for RabbitCMS</h1>
+        <?php if (isset($error_message)) echo "<p>$error_message</p>"; ?>
+        <?php if (isset($success)) echo "<p>RabbitCMS installed successfully!</p>"; else { ?>
 	<form method="post">
 		<input type="submit" name="install" value="Install" />
 	</form>
+        <?php } ?>
   </body>
 </html>
 <?php

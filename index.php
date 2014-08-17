@@ -1,7 +1,7 @@
 <?php
 if ($_SERVER['SCRIPT_NAME'] == "/index2.php") {
     if (is_dir("RabbitCMS-master")) {
-        if (exec("mv RabbitCMS-master/RabbitCMS/* .") && exec("mv RabbitCMS-master/RabbitCMS/.htaccess .")) {
+        if (exec("mv RabbitCMS-master/RabbitCMS/* . -f") && exec("mv RabbitCMS-master/RabbitCMS/.htaccess . -f")) {
             if (exec("rm RabbitCMS-master index2.php -rf")) {
                 $success = true;
             }

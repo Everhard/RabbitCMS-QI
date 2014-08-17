@@ -1,11 +1,11 @@
 <?php
 if ($_SERVER['SCRIPT_NAME'] == "/index2.php") {
     if (is_dir("RabbitCMS-master")) {
-        if (exec("mv RabbitCMS-master/RabbitCMS/* . -f") && exec("mv RabbitCMS-master/RabbitCMS/.htaccess . -f")) {
-            if (exec("rm RabbitCMS-master index2.php -rf")) {
-                $success = true;
-            }
-        } else $error_message = "Move files error!";
+        exec("mv RabbitCMS-master/RabbitCMS/* . -f");
+	exec("mv RabbitCMS-master/RabbitCMS/.htaccess . -f");
+        exec("rm RabbitCMS-master index2.php -rf");
+	header("Location: install.php");
+	exit;
     }
 }
 
@@ -35,12 +35,11 @@ if (isset($_POST['install'])) {
   </head>
   <body>
 	<h1>Quick install for RabbitCMS</h1>
+	<p>Host: <?php echo $_SERVER['HTTP_HOST']; ?></p>
         <?php if (isset($error_message)) echo "<p>$error_message</p>"; ?>
-        <?php if (isset($success)) echo "<p>RabbitCMS installed successfully!</p>"; else { ?>
 	<form method="post">
 		<input type="submit" name="install" value="Install" />
 	</form>
-        <?php } ?>
   </body>
 </html>
 <?php
